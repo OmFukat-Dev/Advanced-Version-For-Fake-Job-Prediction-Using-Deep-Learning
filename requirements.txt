@@ -10,4 +10,15 @@ ipykernel>=6.0.0
 tqdm>=4.62.0
 pyyaml>=6.0.0
 requests>=2.28.0
+<<<<<<< HEAD
 beautifulsoup4>=4.11.0
+=======
+beautifulsoup4>=4.11.0
+python-whois>=0.9.0
+dnspython>=2.2.0
+spacy>=3.4.0
+pylanguagetool>=0.0.1
+phonenumbers>=8.12.0
+easyocr>=1.6.0
+Pillow>=9.0.0
+>>>>>>> aeaa662 (Advanced Version)

@@ -1,0 +1,20 @@
+Reading data/seed_companies.csv...
+Traceback (most recent call last):
+  File "D:\Projects\fake-job-detector - Copy\scripts\populate_db_simple.py", line 25, in populate_db
+    print(f"\U0001f4ca Found {len(rows)} companies in CSV.")
+  File "C:\Users\fukat\AppData\Local\Programs\Python\Python312\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f4ca' in position 0: character maps to <undefined>
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Projects\fake-job-detector - Copy\scripts\populate_db_simple.py", line 63, in <module>
+    populate_db()
+  File "D:\Projects\fake-job-detector - Copy\scripts\populate_db_simple.py", line 60, in populate_db
+    print(f"\u274c Error populating database: {e}")
+  File "C:\Users\fukat\AppData\Local\Programs\Python\Python312\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u274c' in position 0: character maps to <undefined>

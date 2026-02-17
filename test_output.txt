@@ -1,0 +1,10 @@
+Starting test...
+Failed to import TrustAnalyzer: No module named 'whois'
+Failed to import TextAnalyzer: No module named 'spacy'
+Testing Logic...
+CRITICAL ERROR: name 'TrustAnalyzer' is not defined
+Traceback (most recent call last):
+  File "D:\Projects\fake-job-detector - Copy\tests\debug_test.py", line 25, in <module>
+    trust = TrustAnalyzer()
+            ^^^^^^^^^^^^^
+NameError: name 'TrustAnalyzer' is not defined

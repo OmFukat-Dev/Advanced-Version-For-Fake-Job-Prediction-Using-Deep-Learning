@@ -1,0 +1,3 @@
+SUCCESS: whois imported
+File: D:\Projects\fake-job-detector - Copy\venv\Lib\site-packages\whois\__init__.py
+Path: ['D:\\Projects\\fake-job-detector - Copy', 'C:\\Users\\fukat\\AppData\\Local\\Programs\\Python\\Python313\\python313.zip', 'C:\\Users\\fukat\\AppData\\Local\\Programs\\Python\\Python313\\DLLs', 'C:\\Users\\fukat\\AppData\\Local\\Programs\\Python\\Python313\\Lib', 'C:\\Users\\fukat\\AppData\\Local\\Programs\\Python\\Python313', 'D:\\Projects\\fake-job-detector - Copy\\venv', 'D:\\Projects\\fake-job-detector - Copy\\venv\\Lib\\site-packages']

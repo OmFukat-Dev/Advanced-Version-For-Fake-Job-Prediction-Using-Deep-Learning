@@ -1,0 +1,11 @@
+Reading raw file: data/raw_companies.txt
+Found 209 entries.
+Traceback (most recent call last):
+  File "D:\Projects\fake-job-detector - Copy\scripts\process_companies_simple.py", line 70, in <module>
+    process_and_merge()
+  File "D:\Projects\fake-job-detector - Copy\scripts\process_companies_simple.py", line 66, in process_and_merge
+    print(f"\u2705 Total companies in CSV: {len(existing_companies)}")
+  File "C:\Users\fukat\AppData\Local\Programs\Python\Python312\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2705' in position 0: character maps to <undefined>

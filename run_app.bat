@@ -5,7 +5,12 @@ echo ==============================
 echo.
 
 :: Change to project directory
+<<<<<<< HEAD
 cd /d "C:\Users\fukat\OneDrive\Desktop\fake-job-detector"
+=======
+:: Change to project directory
+cd /d "%~dp0"
+>>>>>>> aeaa662 (Advanced Version)
 
 :: Check if directory exists
 if not exist "app.py" (
@@ -19,6 +24,13 @@ echo 📦 Activating Python environment...
 if exist "venv\Scripts\activate.bat" (
     call venv\Scripts\activate.bat
     echo ✅ Virtual environment activated
+<<<<<<< HEAD
+=======
+    
+    echo 📦 Checking dependencies...
+    pip install -r requirements.txt
+    python -m spacy download en_core_web_sm
+>>>>>>> aeaa662 (Advanced Version)
 ) else (
     echo ❌ Virtual environment not found!
     pause

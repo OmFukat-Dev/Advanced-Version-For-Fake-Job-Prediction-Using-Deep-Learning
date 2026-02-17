@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Enhanced Fake Job Detector with REAL Job Scraping
 import streamlit as st
 import pandas as pd
@@ -40,11 +41,31 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 st.set_page_config(
     page_title="JobVerification AI - Real Job Openings Finder",
     page_icon="🧠",
+=======
+import streamlit as st
+import pandas as pd
+import sqlite3
+import time
+from datetime import datetime
+
+# Import core modules
+from src.verification import JobVerifier
+from src.scraper import RealJobScraper
+
+# Set page config
+st.set_page_config(
+    page_title="Antigravity JobGuard - Professional Scam Detection",
+    page_icon="🛡️",
+>>>>>>> aeaa662 (Advanced Version)
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
+<<<<<<< HEAD
 # Professional CSS
+=======
+# Professional CSS (Preserved & Enhanced)
+>>>>>>> aeaa662 (Advanced Version)
 st.markdown("""
 <style>
     :root {
@@ -68,6 +89,7 @@ st.markdown("""
         padding: 1rem;
     }
     
+<<<<<<< HEAD
     .ai-badge {
         background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
         color: white;
@@ -266,10 +288,48 @@ st.markdown("""
         padding: 2rem;
         margin: 1rem 0;
         text-align: center;
+=======
+    .card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e2e8f0;
+    }
+    
+    .metric-box {
+        text-align: center;
+        padding: 1rem;
+        border-radius: 8px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+    }
+    
+    .risk-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        display: inline-block;
+    }
+    
+    .risk-genuine { background: #10b981; }
+    .risk-suspicious { background: #f59e0b; }
+    .risk-fake { background: #ef4444; }
+    
+    .stButton>button {
+        width: 100%;
+        border-radius: 8px;
+        height: 3rem;
+        font-weight: 600;
+>>>>>>> aeaa662 (Advanced Version)
     }
 </style>
 """, unsafe_allow_html=True)
 
+<<<<<<< HEAD
 # ==================== COMPANY DISCOVERY ENGINE ====================
 
 class CompanyDiscoveryEngine:
@@ -1888,3 +1948,204 @@ def main():
 
 if __name__ == "__main__":
     main()
+=======
+# Initialize Logic
+@st.cache_resource
+def get_verifier():
+    return JobVerifier(db_path='companies.db')
+
+@st.cache_resource
+def get_scraper():
+    return RealJobScraper()
+
+verifier = get_verifier()
+scraper = get_scraper()
+
+# ==================== UI LAYOUT ====================
+
+st.markdown('<h1 class="main-header">🛡️ Antigravity JobGuard</h1>', unsafe_allow_html=True)
+st.markdown('<p style="text-align: center; color: #64748b; font-size: 1.2rem;">AI-Powered Fake Job Detection & Career Safety Platform</p>', unsafe_allow_html=True)
+
+# Sidebar
+st.sidebar.markdown("### 🔍 Navigation")
+page = st.sidebar.radio("Go to", ["Job Analyzer", "Find Real Jobs", "Company Database", "About"])
+
+st.sidebar.markdown("---")
+st.sidebar.info("💡 **Tip**: Paste a full job description or URL to get a comprehensive authenticity report.")
+
+# ==================== PAGE: JOB ANALYZER ====================
+if page == "Job Analyzer":
+    st.markdown("### 🕵️ Audit a Job Posting")
+    
+    col1, col2 = st.columns([2, 1])
+    
+    with col1:
+        # Tabbed Input: Text or Image
+        input_method = st.radio("Input Method", ["Paste Text/URL", "Upload Image"], horizontal=True)
+        
+        job_input = ""
+        
+        if input_method == "Paste Text/URL":
+            job_input = st.text_area("Paste Job Description / URL / Email Content", height=300, 
+                                   placeholder="Example: 'Urgent hiring for Google... send resume to hr-google@gmail.com'...")
+        else:
+            from src.ocr import OCRProcessor
+            uploaded_file = st.file_uploader("Upload Job Poster (Image)", type=['png', 'jpg', 'jpeg'])
+            
+            if uploaded_file:
+                with st.spinner("🔍 Extracting text from image..."):
+                    ocr = OCRProcessor()
+                    result = ocr.extract_text(uploaded_file)
+                    
+                    if result['error']:
+                        st.error(result['error'])
+                    else:
+                        st.success("✅ Text extracted successfully!")
+                        # Allow user to edit extracted text
+                        job_input = st.text_area("Extracted Text (Edit if needed)", value=result['text'], height=200)
+
+        analyze_btn = st.button("🚀 Analyze Authenticity", type="primary")
+        
+    with col2:
+        st.markdown("""
+        <div class="card">
+            <h4>What we check:</h4>
+            <ul>
+                <li>✅ <b>Company Verification</b>: Is the company real?</li>
+                <li>✅ <b>Email Legitimacy</b>: Corporate vs Free email</li>
+                <li>✅ <b>Domain Trust</b>: Age & Reputation</li>
+                <li>✅ <b>Scam Patterns</b>: "Urgent", "Pay money", etc.</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+    if analyze_btn and job_input:
+        with st.spinner("🤖 Analyzing thousands of signals..."):
+            # Determine type
+            if job_input.startswith(('http', 'www')):
+                input_type = 'url'
+            else:
+                input_type = 'text'
+                
+            report = verifier.verify_job(job_input, input_type)
+            time.sleep(1) # UX spacer
+            
+            # --- RESULTS SECTION ---
+            st.markdown("---")
+            st.subheader("📊 Verification Report")
+            
+            # Top Metrics
+            m1, m2, m3 = st.columns(3)
+            
+            score = report['scores']['authenticity']
+            verdict = report['final_verdict']
+            
+            with m1:
+                st.metric("Authenticity Score", f"{score}/100")
+            with m2:
+                color_map = {'Genuine': 'risk-genuine', 'Suspicious': 'risk-suspicious', 'Likely Fake': 'risk-fake'}
+                st.markdown(f'<div class="metric-box"><span class="risk-badge {color_map.get(verdict)}">{verdict}</span></div>', unsafe_allow_html=True)
+            with m3:
+                comp_status = report['company_analysis']['status']
+                st.metric("Company Status", comp_status.title(), delta="Verified" if comp_status=='verified' else None)
+
+            # Detailed Breakdown in Tabs
+            tab1, tab2, tab3 = st.tabs(["📝 Content Analysis", "🏢 Company & Trust", "🛑 Flags & Risks"])
+            
+            with tab1:
+                st.markdown(f"**Extracted Info**")
+                st.json(report['extracted_info'])
+                
+                st.markdown("**NLP Patterns Detected**")
+                matches = report['content_analysis']['matches']
+                if matches:
+                    for m in matches:
+                        st.warning(f"⚠️ **{m['category'].upper()}**: {m['pattern']} ({m['level']} risk)")
+                else:
+                    st.success("No common scam language patterns detected.")
+
+            with tab2:
+                col_a, col_b = st.columns(2)
+                with col_a:
+                    st.markdown("### Company Analysis")
+                    st.write(report['company_analysis'])
+                    if report['company_analysis']['status'] == 'verified':
+                        st.image(f"https://logo.clearbit.com/{report['company_analysis']['details'].get('domain', 'google.com')}", width=50)
+                
+                with col_b:
+                    st.markdown("### Trust Signals")
+                    st.write(report['trust_analysis'])
+
+            with tab3:
+                if score < 50:
+                    st.error("❌ High Risk Indicators Present!")
+                    st.write("- Low authenticity score")
+                    st.write(f"- Verdict: {verdict}")
+                else:
+                    st.success("✅ No critical flags found.")
+
+# ==================== PAGE: FIND REAL JOBS ====================
+elif page == "Find Real Jobs":
+    st.markdown("### 🎯 Find 100% Verified Jobs")
+    st.markdown("We skip the job boards and scrape directly from official company career pages.")
+    
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        company_search = st.text_input("Enter Company Name", placeholder="e.g. Google, Tata Motors, HDF Bank")
+    with col2:
+        title_search = st.text_input("Job Title (Optional)", placeholder="e.g. Developer")
+        
+    search_btn = st.button("🔎 Find Legit Jobs")
+    
+    if search_btn and company_search:
+        with st.spinner(f"Connecting to {company_search} official career page..."):
+            # 1. Discover URL first if needed
+            discovery = verifier.discovery_engine.discover_company(company_search)
+            
+            if discovery['found']:
+                careers_url = discovery['careers_url']
+                st.success(f"✅ Verified Career Page: [{careers_url}]({careers_url})")
+                
+                # 2. Scrape Real Jobs
+                jobs = scraper.scrape_real_jobs(company_search, careers_url, title_search)
+                
+                if jobs:
+                    st.markdown(f"### 📋 Open Positions at {company_search}")
+                    for job in jobs:
+                         st.markdown(f"""
+                         <div class="card">
+                            <h4><a href="{job['url']}" target="_blank">{job['title']}</a></h4>
+                            <p>📍 {job.get('location', 'Remote')} | 💼 {job.get('type', 'Full-time')}</p>
+                            <small>Source: Official Website</small>
+                         </div>
+                         """, unsafe_allow_html=True)
+                else:
+                    st.info("No matching jobs found on the official page right now.")
+            else:
+                st.error("Could not verify this company's official website. Please check the spelling.")
+
+# ==================== PAGE: COMPANY DATABASE ====================
+elif page == "Company Database":
+    st.markdown("### 🏢 Verified Company Registry")
+    
+    conn = sqlite3.connect('companies.db')
+    df = pd.read_sql_query("SELECT name, careers_url as career_page_url, verification_confidence as trust_score FROM companies ORDER BY name", conn)
+    conn.close()
+    
+    st.dataframe(df, use_container_width=True)
+
+# ==================== PAGE: ABOUT ====================
+elif page == "About":
+    st.markdown("""
+    ### About Antigravity JobGuard
+    
+    This platform uses advanced AI and real-time open-source intelligence (OSINT) to detect fake job postings.
+    
+    **Technology Stack:**
+    - **Frontend**: Streamlit
+    - **Verification**: Python, Spacy (NLP), Whois
+    - **Data**: SQLite, Real-time Web Scraping
+    
+    **Created by Antigravity Agent**
+    """)
+>>>>>>> aeaa662 (Advanced Version)

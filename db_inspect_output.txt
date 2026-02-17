@@ -1,0 +1,37 @@
+Tables found: [('companies',), ('sqlite_sequence',), ('users',), ('job_postings',), ('scam_patterns',)]
+
+Schema for companies:
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'name', 'TEXT', 1, None, 0)
+(2, 'website', 'TEXT', 1, None, 0)
+(3, 'careers_url', 'TEXT', 0, None, 0)
+(4, 'verified', 'BOOLEAN', 0, '0', 0)
+(5, 'verification_confidence', 'REAL', 0, '0.0', 0)
+(6, 'last_verified', 'TIMESTAMP', 0, None, 0)
+(7, 'features', 'TEXT', 0, None, 0)
+
+Schema for sqlite_sequence:
+(0, 'name', '', 0, None, 0)
+(1, 'seq', '', 0, None, 0)
+
+Schema for users:
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'username', 'TEXT', 1, None, 0)
+(2, 'password_hash', 'TEXT', 1, None, 0)
+(3, 'is_admin', 'BOOLEAN', 0, '0', 0)
+
+Schema for job_postings:
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'company_id', 'INTEGER', 0, None, 0)
+(2, 'content_hash', 'TEXT', 0, None, 0)
+(3, 'source_url', 'TEXT', 0, None, 0)
+(4, 'risk_score', 'REAL', 0, None, 0)
+(5, 'analysis_json', 'TEXT', 0, None, 0)
+(6, 'created_at', 'TIMESTAMP', 0, 'CURRENT_TIMESTAMP', 0)
+
+Schema for scam_patterns:
+(0, 'id', 'INTEGER', 0, None, 1)
+(1, 'pattern_text', 'TEXT', 1, None, 0)
+(2, 'risk_level', 'TEXT', 0, "'high'", 0)
+(3, 'category', 'TEXT', 0, None, 0)
+
