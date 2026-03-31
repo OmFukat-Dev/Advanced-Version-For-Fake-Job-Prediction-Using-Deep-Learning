@@ -1,0 +1,374 @@
+Fake Job Detector V2 - Installation and Usage Guide
+
+1. Project Overview
+
+This project is a Python-based fake job detection system with a Streamlit web interface.
+It can analyze:
+
+1. Pasted job-post text
+2. Uploaded images (OCR)
+3. Uploaded PDF files
+4. Job-post URLs
+
+The app combines:
+
+1. Text red-flag detection
+2. Email, URL, and domain trust checks
+3. Company lookup and careers-page discovery
+4. Recruiter validation
+5. Salary sanity checks
+6. Scam-pattern similarity checks
+7. Community reporting
+8. A local SQLite database
+
+Live lookup features make public web requests to search engines, company websites, recruiter/profile pages, WHOIS services, and DNS lookups. No paid API keys are required.
+
+Main technologies used in this repository:
+
+1. Python
+2. Streamlit
+3. TensorFlow / Keras
+4. pandas, NumPy, scikit-learn
+5. spaCy, langdetect, NLTK
+6. requests, BeautifulSoup
+7. EasyOCR, Pillow, pdfplumber
+8. SQLite
+9. YAML configuration
+10. Windows batch scripting (`run_app.bat`)
+
+Main entry point:
+
+```text
+app.py
+```
+
+Windows launcher:
+
+```text
+run_app.bat
+```
+
+2. Prerequisites
+
+Install the following before running the project:
+
+1. Git
+2. Python 3.12 recommended
+3. pip
+4. A modern web browser
+5. Internet access
+
+Notes:
+
+1. The checked-in virtual environment in this workspace was created with Python 3.12.7, so Python 3.12 is the safest choice.
+2. Internet is needed for package installation, spaCy model download, and the live lookup features used for company discovery, recruiter checks, WHOIS checks, DNS checks, and URL fetching.
+3. If the raw dataset is not present in your clone, you may need access to the Kaggle dataset referenced by this project.
+
+3. Installation Steps
+
+1. Clone the repository:
+
+```bash
+git clone <repository-url>
+cd "<project-folder>"
+```
+
+2. Create a virtual environment:
+
+Windows:
+
+```bat
+python -m venv venv
+venv\Scripts\activate
+```
+
+macOS/Linux:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+3. Upgrade pip and install dependencies:
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+4. Install the spaCy English model used by the text-analysis module:
+
+```bash
+python -m spacy download en_core_web_sm
+```
+
+5. Check that the raw dataset exists at this path:
+
+```text
+data/raw/fake_job_postings.csv
+```
+
+If it is missing, download the dataset referenced by the project and save it with this exact name:
+
+```text
+data/raw/fake_job_postings.csv
+```
+
+The helper script points to this source:
+
+```text
+https://www.kaggle.com/shivamb/real-or-fake-fake-jobposting-prediction
+```
+
+6. If your clone does not contain generated files under `data/processed/`, create them:
+
+```bash
+python scripts/run_data_cleaning.py
+```
+
+This creates:
+
+```text
+data/processed/train_data.csv
+data/processed/val_data.csv
+data/processed/test_data.csv
+```
+
+7. If `models/tokenizer.pkl` is missing, generate it:
+
+```bash
+python scripts/save_tokenizer.py
+```
+
+8. If `companies.db` is missing, create the local SQLite database:
+
+```bash
+python scripts/init_db.py
+```
+
+9. Optional: load the seed company list into the database:
+
+```bash
+python scripts/populate_db_simple.py
+```
+
+10. No separate build step is required for the Streamlit application.
+
+4. How to Run the Project
+
+Option 1: Easiest on Windows
+
+```bat
+run_app.bat
+```
+
+What `run_app.bat` does:
+
+1. Activates `venv`
+2. Installs packages from `requirements.txt`
+3. Downloads the spaCy model if needed
+4. Creates `companies.db` if it does not exist
+5. Runs data cleaning if processed CSV files are missing
+6. Creates `models/tokenizer.pkl` if it is missing
+7. Starts Streamlit
+
+Option 2: Manual run on any platform
+
+```bash
+streamlit run app.py
+```
+
+After startup, open:
+
+```text
+http://localhost:8501
+```
+
+Basic usage inside the app:
+
+1. Open `Analyze Job Post` to paste text, upload an image, upload a PDF, or enter a job URL.
+2. Open `Company Lookup` to search the company database or discover a company website/careers page.
+3. Use `Find Real Job Openings` inside the company section to scrape official careers pages.
+4. Open `Analysis History` to review saved analysis results.
+5. Open `Community Reports` to submit or review community feedback.
+6. Open `Admin` for scam-pattern and company management.
+
+5. Configuration Details
+
+Important files:
+
+1. `app.py`
+   Main Streamlit application.
+
+2. `run_app.bat`
+   Windows helper script that automates setup and launch.
+
+3. `requirements.txt`
+   Python package list used by `pip`.
+
+4. `config.yaml`
+   Used by the preprocessing and training utilities. It stores dataset paths, processed-data paths, split sizes, model settings, training settings, and model/embeddings locations.
+
+5. `companies.db`
+   Local SQLite database used by the app.
+
+6. `data/seed_companies.csv`
+   Seed list of companies and careers pages used to populate the database.
+
+7. `data/raw/fake_job_postings.csv`
+   Raw training dataset used by the preprocessing scripts.
+
+6. Database Setup
+
+This project uses SQLite only. You do not need MySQL, PostgreSQL, or any separate database server.
+
+Default database file:
+
+```text
+companies.db
+```
+
+Recommended database setup:
+
+1. If `companies.db` already exists and the app works, you can keep using it.
+2. If `companies.db` is missing, create it with:
+
+```bash
+python scripts/init_db.py
+```
+
+3. If you want to load the seed company list, run:
+
+```bash
+python scripts/populate_db_simple.py
+```
+
+What `scripts/init_db.py` creates/seeds:
+
+1. company records
+2. job-post analysis history
+3. scam-pattern records
+4. community reports
+5. salary benchmarks
+6. scam templates
+7. domain cache
+8. users table
+
+7. Environment Variables
+
+This project uses one project-specific environment variable:
+
+1. `JOBGUARD_ADMIN_PW`
+   Purpose: sets the Admin tab password. Default value if not set: `admin123`.
+
+Example on Windows CMD:
+
+```bat
+set JOBGUARD_ADMIN_PW=mystrongpassword
+run_app.bat
+```
+
+Example on PowerShell:
+
+```powershell
+$env:JOBGUARD_ADMIN_PW="mystrongpassword"
+streamlit run app.py
+```
+
+Example on macOS/Linux:
+
+```bash
+export JOBGUARD_ADMIN_PW="mystrongpassword"
+streamlit run app.py
+```
+
+There is no `.env` file required by this repository.
+
+8. Troubleshooting
+
+1. Error: `streamlit` or another module is not found
+
+Make sure the virtual environment is activated, then reinstall dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+2. Error: spaCy model `en_core_web_sm` not found
+
+Run:
+
+```bash
+python -m spacy download en_core_web_sm
+```
+
+3. Error: `data/raw/fake_job_postings.csv` not found
+
+Download the dataset and place it here:
+
+```text
+data/raw/fake_job_postings.csv
+```
+
+4. Error: `train_data.csv` or other processed CSV files are missing
+
+Run:
+
+```bash
+python scripts/run_data_cleaning.py
+```
+
+5. Error: `models/tokenizer.pkl` is missing
+
+Run:
+
+```bash
+python scripts/save_tokenizer.py
+```
+
+6. SQLite errors about missing tables or missing columns
+
+The simplest fix is to create a fresh database:
+
+```bash
+python scripts/init_db.py
+python scripts/populate_db_simple.py
+```
+
+If the error continues, rename or delete `companies.db` first, then run the two commands again.
+
+7. Windows `UnicodeEncodeError: 'charmap' codec can't encode character`
+
+Some helper scripts and tests print emoji characters. In Windows CMD, switch to UTF-8 before running them:
+
+```bat
+chcp 65001
+set PYTHONIOENCODING=utf-8
+```
+
+8. OCR or PDF extraction is not working
+
+Reinstall the related packages:
+
+```bash
+python -m pip install easyocr pdfplumber Pillow
+```
+
+9. Live company lookup, recruiter lookup, or URL analysis returns weak results
+
+These features depend on public websites and search engines. Check your internet connection and try again later if a site is blocking or rate-limiting requests.
+
+9. Additional Notes
+
+1. The main web app is the easiest way to use this project. Start with `run_app.bat` on Windows or `streamlit run app.py` on any platform.
+2. The repository also contains notebooks in `notebooks/` for data exploration and model experimentation. They are optional.
+3. The scripts in `scripts/production_predict.py` and `scripts/predict_job.py` expect trained model files under `models/`. These scripts are separate from the main Streamlit UI.
+4. No paid API keys are required. The project relies on public web requests instead of commercial APIs.
+5. Keep the following files in the project root while running the app:
+
+```text
+app.py
+companies.db
+config.yaml
+requirements.txt
+```
